@@ -1,6 +1,6 @@
 version: '3'
 services:
-    php71-first:
+    php71-s1.mmgx.ru:
       build:
         context: ./images/php71
         args:
@@ -10,11 +10,12 @@ services:
         - ./www:/var/www
         - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
       environment:
-        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9008"
-        PHP_IDE_CONFIG: "serverName=first"
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9001"
+        PHP_IDE_CONFIG: "serverName=s1.mmgx.ru"
       networks:
-        - test-network
-    php71-two:
+        - network01
+    
+    php71-s2.mmgx.ru:
       build:
         context: ./images/php71
         args:
@@ -24,11 +25,57 @@ services:
         - ./www:/var/www
         - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
       environment:
-        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009"
-        PHP_IDE_CONFIG: "serverName=two"
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9002"
+        PHP_IDE_CONFIG: "serverName=s2.mmgx.ru"
       networks:
-        - test-network
-    nginx-test:
+        - network01
+    
+    php71-s3.mmgx.ru:
+      build:
+        context: ./images/php71
+        args:
+          - USER_ID
+          - GROUP_ID
+      volumes:
+        - ./www:/var/www
+        - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
+      environment:
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9003"
+        PHP_IDE_CONFIG: "serverName=s3.mmgx.ru"
+      networks:
+        - network01
+    
+    php71-s4.mmgx.ru:
+      build:
+        context: ./images/php71
+        args:
+          - USER_ID
+          - GROUP_ID
+      volumes:
+        - ./www:/var/www
+        - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
+      environment:
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9004"
+        PHP_IDE_CONFIG: "serverName=s4.mmgx.ru"
+      networks:
+        - network01
+    
+    php71-s5.mmgx.ru:
+      build:
+        context: ./images/php71
+        args:
+          - USER_ID
+          - GROUP_ID
+      volumes:
+        - ./www:/var/www
+        - ./aliases/php71/bash.bashrc:/etc/bash.bashrc
+      environment:
+        XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9005"
+        PHP_IDE_CONFIG: "serverName=s5.mmgx.ru"
+      networks:
+        - network01
+    
+    network01:
       image: nginx
       volumes:
         - ./hosts:/etc/nginx/conf.d
@@ -37,13 +84,19 @@ services:
       ports:
         - "8080:80"
       depends_on:
-        - php71-first
-        - php71-two
+        - php71-s1.mmgx.ru
+        - php71-s2.mmgx.ru
+        - php71-s3.mmgx.ru
+        - php71-s4.mmgx.ru
+        - php71-s5.mmgx.ru
       networks:
-        test-network:
+        network01:
           aliases: # алиасы нужны если нужно общаться внутри сети между хостами. Например, если вы используете api
-            - first.loc
-            - two.loc
+            - s1.mmgx.loc
+            - s2.mmgx.loc
+            - s3.mmgx.loc
+            - s4.mmgx.loc
+            - s5.mmgx.loc
 #    mysql:
 #      image: mysql:5.7
 #      ports:
@@ -53,11 +106,11 @@ services:
 #      environment:
 #        MYSQL_ROOT_PASSWORD: secret
 #      networks:
-#        - test-network
+#        - network01
 networks:
-  test-network:
+  network01:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 192.168.220.0/28
+        - subnet: 192.168.220.0/24

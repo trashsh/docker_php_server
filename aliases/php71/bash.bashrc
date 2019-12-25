@@ -58,7 +58,10 @@ alias cl='clear'
 
 alias ll='ls -alF'
 alias l='ls -la'
-alias cdf='cd /var/www/first.loc'
-alias cdt='cd /var/www/two.loc'
+alias cds1='cd /var/www/s1.mmgx.ru'
+alias cds2='cd /var/www/s2.mmgx.ru'
+alias cds3='cd /var/www/s3.mmgx.ru'
+alias cds4='cd /var/www/s4.mmgx.ru'
+alias cds5='cd /var/www/s5.mmgx.ru'
 
 
